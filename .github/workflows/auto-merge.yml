@@ -16,15 +16,20 @@ jobs:
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'you@example.com'
-          git remote add upstream https://github.com/documentos-digitales-lab/pruebas-prs.git
-          git fetch upstream
-          git checkout -b auto-merge/$GITHUB_HEAD_REF upstream/QA
+          git rev-parse --abbrev-ref HEAD
+          git status
+          git fetch
+          git checkout -b auto-merge/$GITHUB_HEAD_REF
+          git checkout QA
 
           # Merge changes
-          if git merge --no-ff $GITHUB_HEAD_REF; then
+          if git merge --no-ff --allow-unrelated-histories auto-merge/$GITHUB_HEAD_REF; then
             # Successful merge
-            git push upstream auto-merge/$GITHUB_HEAD_REF:QA
+            git push origin auto-merge/$GITHUB_HEAD_REF:QA
+            echo "Merged QA."
           else
+            output=$(git merge --no-ff $GITHUB_HEAD_REF)
+            echo $output
             # Merge conflict
             echo "Merge conflict, aborting automatic merge."
             # Optionally, you can notify someone or take other actions here
