@@ -3,40 +3,38 @@ name: Auto Merge on Label
 on:
   pull_request:
     types: [labeled]
+env:
+  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
 
 jobs:
-  merge:
+  main:
+    if: ${{ github.event.label.name == 'merge-to-qa' }}
+    name: Merge QA
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: git checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
 
-      - name: Merge into QA
-        if: github.event.label.name == 'merge-to-qa'  # Nombre de la etiqueta aquí
+      - name: perform merge
         run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'you@example.com'
-          git rev-parse --abbrev-ref HEAD
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
           git status
-          git fetch
-          git checkout -b auto-merge/$GITHUB_HEAD_REF
+          git pull
           git checkout QA
+          echo "checkout=> QA"
+          git status
+          # git checkout "$GITHUB_HEAD_REF"
+          echo "checkout FEAT=> $GITHUB_HEAD_REF"
+          git merge "$GITHUB_HEAD_REF" --no-edit
+          git push
+          git status
 
-          # Merge changes
-          if git merge --no-ff --allow-unrelated-histories auto-merge/$GITHUB_HEAD_REF; then
-            # Successful merge
-            git push origin auto-merge/$GITHUB_HEAD_REF:QA
-            echo "Merged QA."
-          else
-            output=$(git merge --no-ff $GITHUB_HEAD_REF)
-            echo $output
-            # Merge conflict
-            echo "Merge conflict, aborting automatic merge."
-            # Optionally, you can notify someone or take other actions here
-          fi
-
-          # Clean up branch
-          git checkout QA
-          git branch -D auto-merge/$GITHUB_HEAD_REF
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: remove label
+        if: always()
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: merge QA
