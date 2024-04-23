@@ -1,0 +1,30 @@
+name: Update Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Perform Sync
+        run: |
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git status
+          git pull
+          git checkout $DESTINATION_BRANCH
+          git merge --no-ff $SOURCE_BRANCH
+          git push origin $DESTINATION_BRANCH
+        env: 
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          SOURCE_BRANCH: 'main'
+          DESTINATION_BRANCH: 'QA'
