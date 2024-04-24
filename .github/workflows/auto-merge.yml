@@ -12,15 +12,10 @@ jobs:
     if: ${{ github.event.label.name == 'merge-to-qa' }}
     permissions:
       contents: write
-
+      issues: write
     name: Merge QA
     runs-on: ubuntu-latest
     steps:
-      - name: Debug
-        run: |
-          echo "Owner: ${{ github.event.pull_request.head.repo.owner.login }}"
-          echo "Repo: ${{ github.event.pull_request.head.repo.name }}"
-
       - name: git checkout
         uses: actions/checkout@v3
         with:
@@ -45,7 +40,7 @@ jobs:
           echo "Pushed"
           git status
         env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: remove label
         if: always()
