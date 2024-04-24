@@ -40,7 +40,9 @@ jobs:
           git status
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
-          git push
+          echo "merged $GITHUB_HEAD_REF into QA "
+          git push -f upstream QA
+          echo "Pushed"
           git status
 
       - name: remove label
