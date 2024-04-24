@@ -42,7 +42,7 @@ jobs:
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
           echo "merged $GITHUB_HEAD_REF into QA "
-          git push https://${USERNAME}:${GITHUB_TOKEN}@github.com/documentos-digitales-lab/pruebas-prs upstream QA --verbose
+          git push https://${USERNAME}:${GITHUB_TOKEN}@github.com/documentos-digitales-lab/pruebas-prs QA --verbose
           echo "Pushed"
           git status
         env:
