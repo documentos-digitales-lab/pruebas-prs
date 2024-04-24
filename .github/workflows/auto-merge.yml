@@ -18,9 +18,10 @@ jobs:
           echo "Repo: ${{ github.event.pull_request.head.repo.name }}"
 
       - name: git checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
 
       - name: perform merge
