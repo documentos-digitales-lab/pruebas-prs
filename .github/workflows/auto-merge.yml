@@ -32,14 +32,14 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git status
           git remote add upstream https://github.com/documentos-digitales-lab/pruebas-prs.git
-          git fetch upstream
+          git fetch --all
           git checkout -b QA upstream/QA
           echo "checkout=> upstream/QA"
           git status
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
           echo "merged $GITHUB_HEAD_REF into QA "
-          git push -f upstream QA
+          git push --set-upstream upstream
           echo "Pushed"
           git status
         env:
