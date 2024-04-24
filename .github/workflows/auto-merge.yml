@@ -16,7 +16,6 @@ jobs:
         run: |
           echo "Owner: ${{ github.event.pull_request.head.repo.owner.login }}"
           echo "Repo: ${{ github.event.pull_request.head.repo.name }}"
-          echo "Branch: ${{ GITHUB_HEAD_REF }}"
 
       - name: git checkout
         uses: actions/checkout@v3
