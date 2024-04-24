@@ -44,7 +44,7 @@ jobs:
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
           echo "merged $GITHUB_HEAD_REF into QA "
-          git push --set-upstream upstream
+          git push --set-upstream upstream --verbose
           echo "Pushed"
           git status
         env:
