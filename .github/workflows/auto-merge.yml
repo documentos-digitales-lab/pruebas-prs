@@ -29,11 +29,11 @@ jobs:
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global user.name "${GITHUB_ACTOR}"
           git status
-          git pull
-          git checkout QA
-          echo "checkout=> QA"
+          git remote add upstream https://github.com/documentos-digitales/erp-api.git
+          git fetch upstream
+          git checkout -b QA upstream/QA
+          echo "checkout=> upstream/QA"
           git status
-          # git checkout "$GITHUB_HEAD_REF"
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
           git push
