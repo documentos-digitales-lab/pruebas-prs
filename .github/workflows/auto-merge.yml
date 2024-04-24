@@ -23,7 +23,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-          token: ${{ secrets.GITHUB_TOKEN }} 
+          token: ${{ secrets.API_TOKEN_GITHUB }} 
           fetch-depth: 0
 
       - name: perform merge
