@@ -22,6 +22,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+          
+      - name: Debug
+        run: |
+          echo "Permissions: ${{ github.event.pull_request.head.repo.permissions }}"
+          echo "Owner: ${{ github.event.pull_request.head.repo.owner.login }}"
+          echo "Repo: ${{ github.event.pull_request.head.repo.name }}"
 
       - name: perform merge
         run: |
@@ -36,11 +42,12 @@ jobs:
           echo "checkout FEAT=> $GITHUB_HEAD_REF"
           git merge "$GITHUB_HEAD_REF" --no-edit
           echo "merged $GITHUB_HEAD_REF into QA "
-          git push upstream QA --verbose
+          git push https://USERNAME:${GITHUB_TOKEN}github.com/documentos-digitales-lab/pruebas-prs upstream QA --verbose
           echo "Pushed"
           git status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.event.pull_request.head.repo.owner.login }}
 
       - name: remove label
         if: always()
