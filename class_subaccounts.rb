@@ -1,6 +1,7 @@
 class Api::V1::AuxiliarySubaccountsController < ApplicationController
   before_action :set_company
   before_action :set_auxiliary_subaccount, only: %i[ show update]
+  
   def index
     @auxiliary_subaccounts = AuxiliarySubaccount.list(@company.id, params[:parent_id])
     render_success('', AuxiliarySubaccountSerializer.render_as_hash(@auxiliary_subaccounts, view: :index), 200)
