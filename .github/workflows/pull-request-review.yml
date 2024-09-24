@@ -1,0 +1,52 @@
+name: "PR Code Review"
+
+on:
+  pull_request:
+    paths-ignore:
+      - "*.md"
+      - "LICENSE"
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Get diff of the pull request"
+        id: get_diff
+        shell: bash
+        env:
+          PULL_REQUEST_HEAD_REF: "${{ github.event.pull_request.head.ref }}"
+        run: |-
+          # Fetch the default branch
+          git fetch origin "${{ env.DEFAULT_BRANCH }}"
+          # Exclude png files from diff
+          git diff "origin/${{ env.DEFAULT_BRANCH }}" ":(exclude)*.png" > "diff.txt"
+          # Put multi-line string into an environment variable
+          # shellcheck disable=SC2086
+          {
+            echo "pull_request_diff<<EOF";
+            cat "diff.txt";
+            echo 'EOF';
+          } >> $GITHUB_OUTPUT
+
+      - name: LLM Code Review
+        uses: rajsinghparihar/llm-code-review@0.0.1
+        id: review
+        with:
+          apiKey: ${{ secrets.API_KEY }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          githubRepository: ${{ github.repository }}
+          githubPullRequestNumber: ${{ github.event.pull_request.number }}
+          gitCommitHash: ${{ github.event.pull_request.head.sha }}
+          repoId: "llama3-70b-8192"
+          temperature: "0.2"
+          maxNewTokens: "256"
+          topK: "40"
+          topP: "0.95"
+          pullRequestDiff: |-
+            ${{ steps.get_diff.outputs.pull_request_diff }}
+          pullRequestChunkSize: "4000"
+          logLevel: "DEBUG"
