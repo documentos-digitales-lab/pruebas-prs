@@ -23,7 +23,7 @@ jobs:
           # Fetch the default branch
           git fetch origin "${{ env.DEFAULT_BRANCH }}"
           # Exclude png files from diff
-          git diff "origin/${{ env.DEFAULT_BRANCH }}" ":(exclude)*.png" > "diff.txt"
+          git diff "origin/${{ env.DEFAULT_BRANCH }}:." ":(exclude)*.png" > "diff.txt"
           # Put multi-line string into an environment variable
           # shellcheck disable=SC2086
           {
@@ -36,7 +36,7 @@ jobs:
         uses: rajsinghparihar/llm-code-review@v0.0.1-groq
         id: review
         with:
-          apiKey: ${{ secrets.API_KEY }}
+          apiKey: ${{ secrets.GROQ_API_KEY }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           githubRepository: ${{ github.repository }}
           githubPullRequestNumber: ${{ github.event.pull_request.number }}
