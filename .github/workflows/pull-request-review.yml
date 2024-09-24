@@ -33,7 +33,7 @@ jobs:
           } >> $GITHUB_OUTPUT
 
       - name: LLM Code Review
-        uses: rajsinghparihar/llm-code-review@0.0.1
+        uses: rajsinghparihar/llm-code-review@v0.0.1-groq
         id: review
         with:
           apiKey: ${{ secrets.API_KEY }}
