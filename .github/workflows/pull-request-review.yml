@@ -21,9 +21,9 @@ jobs:
           PULL_REQUEST_HEAD_REF: "${{ github.event.pull_request.head.ref }}"
         run: |-
           # Fetch the default branch
-          git fetch origin "${{ env.DEFAULT_BRANCH }}"
+          git fetch origin "${{ github.default_branch }}"
           # Exclude png files from diff
-          git diff "origin/${{ env.DEFAULT_BRANCH }}:." ":(exclude)*.png" > "diff.txt"
+          git diff "origin/${{ github.default_branch }}:." ":(exclude)*.png" > "diff.txt"
           # Put multi-line string into an environment variable
           # shellcheck disable=SC2086
           {
