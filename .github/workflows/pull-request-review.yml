@@ -9,6 +9,8 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
+    env:
+      DEFAULT_BRANCH: ${{ github.default_branch }}
     permissions:
       contents: read
       pull-requests: write
@@ -21,9 +23,10 @@ jobs:
           PULL_REQUEST_HEAD_REF: "${{ github.event.pull_request.head.ref }}"
         run: |-
           # Fetch the default branch
-          git fetch origin "${{ github.default_branch }}"
+          echo "DEFAULT_BRANCH: $DEFAULT_BRANCH"
+          git fetch origin $DEFAULT_BRANCH
           # Exclude png files from diff
-          git diff "origin/${{ github.default_branch }}:." ":(exclude)*.png" > "diff.txt"
+          git diff "origin/$DEFAULT_BRANCH:." ":(exclude)*.png" > "diff.txt"
           # Put multi-line string into an environment variable
           # shellcheck disable=SC2086
           {
