@@ -10,7 +10,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     env:
-      DEFAULT_BRANCH: $(git rev-parse --abbrev-ref HEAD)
+      DEFAULT_BRANCH: $(git rev-parse --symbolic HEAD)
     permissions:
       contents: read
       pull-requests: write
