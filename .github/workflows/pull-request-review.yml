@@ -1,4 +1,4 @@
-name: "PR Code Review"
+name: "Test Code Review"
 
 on:
   pull_request:
@@ -9,8 +9,6 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
-    env:
-      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
     permissions:
       contents: read
       pull-requests: write
@@ -22,21 +20,13 @@ jobs:
         env:
           PULL_REQUEST_HEAD_REF: "${{ github.event.pull_request.head.ref }}"
         run: |-
-          echo "DEFAULT_BRANCH: $DEFAULT_BRANCH"
-          echo "Fetch the default branch"
-          git fetch origin $DEFAULT_BRANCH
-          echo "Exclude png files from diff"
-          git diff "origin/$DEFAULT_BRANCH" ":(exclude)*.png" > "diff.txt"
-          echo "Put multi-line string into an environment variable"
+          git fetch origin "${{ env.PULL_REQUEST_HEAD_REF }}:${{ env.PULL_REQUEST_HEAD_REF }}"
+          git checkout "${{ env.PULL_REQUEST_HEAD_REF }}"
+          git diff "origin/${{ env.PULL_REQUEST_HEAD_REF }}" > "diff.txt"
           # shellcheck disable=SC2086
-          {
-            echo "pull_request_diff<<EOF";
-            cat "diff.txt";
-            echo 'EOF';
-          } >> $GITHUB_OUTPUT
-
-      - name: LLM Code Review
-        uses: dd-ocastillo/llm-code-review@v0.0.1
+          echo "diff=$(cat "diff.txt")" >> $GITHUB_ENV
+      - uses: luiyen/llm-code-review@v0.0.1
+        name: "Code Review"
         id: review
         with:
           apiKey: "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"
@@ -46,10 +36,10 @@ jobs:
           gitCommitHash: ${{ github.event.pull_request.head.sha }}
           repoId: "llama3-8b-8192"
           temperature: "0.2"
-          maxNewTokens: "256"
-          topK: "40"
+          maxNewTokens: "250"
+          topK: "50"
           topP: "0.95"
           pullRequestDiff: |-
             ${{ steps.get_diff.outputs.pull_request_diff }}
-          pullRequestChunkSize: "4000"
+          pullRequestChunkSize: "3500"
           logLevel: "DEBUG"
