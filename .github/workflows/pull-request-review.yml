@@ -34,7 +34,7 @@ jobs:
           githubRepository: ${{ github.repository }}
           githubPullRequestNumber: ${{ github.event.pull_request.number }}
           gitCommitHash: ${{ github.event.pull_request.head.sha }}
-          repoId: "llama3-8b-8192"
+          repoId: "mesolitica/llama-3-8b-8192-hf"
           temperature: "0.2"
           maxNewTokens: "250"
           topK: "50"
