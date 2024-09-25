@@ -29,7 +29,7 @@ jobs:
         name: "Code Review"
         id: review
         with:
-          apiKey: "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"
+          apiKey: "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"
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           githubRepository: ${{ github.repository }}
           githubPullRequestNumber: ${{ github.event.pull_request.number }}
