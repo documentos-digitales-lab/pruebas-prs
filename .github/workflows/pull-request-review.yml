@@ -27,9 +27,6 @@ jobs:
           echo "diff=$(cat "diff.txt")" >> $GITHUB_ENV
       - uses: luiyen/llm-code-review@1.0.1
         name: "Code Review"
-          echo "diff=$(cat "diff.txt")" >> $GITHUB_ENV
-      - uses: luiyen/llm-code-review@v0.0.1
-        name: "Code Review"
         id: review
         with:
           apiKey: "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"
