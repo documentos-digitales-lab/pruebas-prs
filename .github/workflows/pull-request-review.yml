@@ -25,16 +25,16 @@ jobs:
           git diff "origin/${{ env.PULL_REQUEST_HEAD_REF }}" > "diff.txt"
           # shellcheck disable=SC2086
           echo "diff=$(cat "diff.txt")" >> $GITHUB_ENV
-      - uses: luiyen/llm-code-review@v0.0.1
+      - uses: luiyen/llm-code-review@1.0.1
         name: "Code Review"
         id: review
         with:
-          apiKey: "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"
+          apiKey: "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"
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           githubRepository: ${{ github.repository }}
           githubPullRequestNumber: ${{ github.event.pull_request.number }}
           gitCommitHash: ${{ github.event.pull_request.head.sha }}
-          repoId: "llama3-8b-8192"
+          repoId: "mesolitica/llama-3-8b-8192-hf"
           temperature: "0.2"
           maxNewTokens: "250"
           topK: "50"
