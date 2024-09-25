@@ -38,12 +38,12 @@ jobs:
         uses: dd-ocastillo/llm-code-review@v0.0.1
         id: review
         with:
-          apiKey: ${{ secrets.GROQ_API_KEY }}
+          apiKey: "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"
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           githubRepository: ${{ github.repository }}
           githubPullRequestNumber: ${{ github.event.pull_request.number }}
           gitCommitHash: ${{ github.event.pull_request.head.sha }}
-          repoId: "llama3-70b-8192"
+          repoId: "llama3-8b-8192"
           temperature: "0.2"
           maxNewTokens: "256"
           topK: "40"
